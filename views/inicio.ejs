@@ -14,7 +14,7 @@
 </head>
 <body>
     <div id="contenedor-temporizador">
-        <p id="tiempo-restante">00:05</p>
+        <p id="tiempo-restante">00:00</p>
     </div>
     <div id="contenedor-costo">
         <p id="costo-total">Costo: $0.00</p>
@@ -31,7 +31,7 @@
     const staticImage = document.getElementById('lavadora');
     const tiempoDisplay = document.getElementById("tiempo-restante");
     const costoDisplay = document.getElementById("costo-total");
-    let tiempoRestanteSegundos = 5; // Tiempo inicial
+    let tiempoRestanteSegundos = 60; // Tiempo inicial
     let temporizadorInterval;
     const costoPorMinuto = 0.10; // Ejemplo: $0.10 por minuto
     let costoTotal = 0;
@@ -63,10 +63,10 @@
         staticImage.style.display = estado ? 'none' : 'block';
 
         if (estado) {
-            iniciarTemporizador(5); // Iniciar con 5 segundos
+            iniciarTemporizador(60); // Iniciar con 5 segundos
         } else {
             clearInterval(temporizadorInterval);
-            tiempoDisplay.textContent = "00:05";
+            tiempoDisplay.textContent = "01:00";
             tiempoRestanteSegundos = 5;
             costoTotal = 0; // Resetear el costo al apagar
             costoDisplay.textContent = `Costo: $0.00`; // Actualizar la visualización del costo
