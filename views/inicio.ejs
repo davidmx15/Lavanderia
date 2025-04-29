@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lavandería</title>
+    <style>
+        #lavadora, #lavadoraGif {
+            width: 300px;
+            height: 200px;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div id="contenedor-temporizador">
+        <p id="tiempo-restante">00:05</p>
+    </div>
+    <div id="contenedor-costo">
+        <p id="costo-total">Costo: $0.00</p>
+    </div>
+    <div style="position: relative; width: 300px; height: 200px;">
+        <img id="lavadoraGif" src="images/07-18-23-383_512.webp" alt="Lavadora">
+        <img id="lavadora" src="images/lavadora_png.png" alt="Lavadora" style="display: none;">
+    </div>
+    <button onclick="encender(true)">Encender</button>
+    <button onclick="encender(false)">Apagar</button>
+</body>
+<script>
+    const gifImage = document.getElementById('lavadoraGif');
+    const staticImage = document.getElementById('lavadora');
+    const tiempoDisplay = document.getElementById("tiempo-restante");
+    const costoDisplay = document.getElementById("costo-total");
+    let tiempoRestanteSegundos = 5; // Tiempo inicial
+    let temporizadorInterval;
+    const costoPorMinuto = 0.10; // Ejemplo: $0.10 por minuto
+    let costoTotal = 0;
+
+    function iniciarTemporizador(segundos) {
+        tiempoRestanteSegundos = segundos;
+        costoTotal = 0; // Resetear el costo al iniciar un nuevo ciclo
+        clearInterval(temporizadorInterval);
+        temporizadorInterval = setInterval(() => {
+            const minutosMostrar = Math.floor(tiempoRestanteSegundos / 60);
+            const segundosMostrar = tiempoRestanteSegundos % 60;
+
+            tiempoDisplay.textContent = `${String(minutosMostrar).padStart(2, '0')}:${String(segundosMostrar).padStart(2, '0')}`;
+
+            // Calcular el costo por cada segundo que pasa
+            costoTotal += (costoPorMinuto / 60); // Costo por segundo
+            costoDisplay.textContent = `Costo: $${costoTotal.toFixed(2)}`; // Mostrar el costo con 2 decimales
+
+            if (tiempoRestanteSegundos-- <= 0) {
+                clearInterval(temporizadorInterval);
+                tiempoDisplay.textContent = "¡Ciclo de lavado terminado!";
+                encender(false); // Apagar al finalizar
+            }
+        }, 1000);
+    }
+
+    function encender(estado) {
+        gifImage.style.display = estado ? 'block' : 'none';
+        staticImage.style.display = estado ? 'none' : 'block';
+
+        if (estado) {
+            iniciarTemporizador(5); // Iniciar con 5 segundos
+        } else {
+            clearInterval(temporizadorInterval);
+            tiempoDisplay.textContent = "00:05";
+            tiempoRestanteSegundos = 5;
+            costoTotal = 0; // Resetear el costo al apagar
+            costoDisplay.textContent = `Costo: $0.00`; // Actualizar la visualización del costo
+        }
+    }
+
+    encender(false); // Inicialmente apagada
+</script>
+</html>
