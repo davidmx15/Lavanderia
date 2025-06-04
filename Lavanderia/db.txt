@@ -1,0 +1,9 @@
+CREATE DATABASE lavadora_db;
+
+USE lavadora_db;
+
+CREATE TABLE corte_lavadora (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    ganancia DECIMAL(10,2) NOT NULL
+);
