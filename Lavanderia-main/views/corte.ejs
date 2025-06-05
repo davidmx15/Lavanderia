@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Corte del Día</title>
+  <style>
+    table {
+      width: 90%;
+      margin: auto;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      border: 1px solid #aaa;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #eee;
+    }
+
+    h1,
+    h2 {
+      text-align: center;
+    }
+
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Corte del Día</h1>
+  <h2>Total Ganado: $<%= Number(totalGanancia).toFixed(2) %>
+  </h2>
+
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Fecha</th>
+      <th>Ganancia</th>
+      <th>Detalle (si aplica)</th>
+    </tr>
+    <% if (cortes.length===0) { %>
+      <tr>
+        <td colspan="4">No hay registros aún.</td>
+      </tr>
+      <% } else { %>
+        <% cortes.forEach(corte=> { %>
+          <tr>
+            <td>
+              <%= corte.id %>
+            </td>
+            <td>
+              <%= new Date(corte.fecha).toLocaleString() %>
+            </td>
+            <td>
+              <%= corte.descripcion && corte.descripcion.length> 0 ? 'Insumos: $' : 'Lavadora: $' %>
+                <%= Number(corte.ganancia).toFixed(2) %>
+            </td>
+            <td>
+              <%= corte.descripcion || '---' %>
+            </td>
+          </tr>
+          <% }) %>
+            <% } %>
+  </table>
+
+  <form action="/corte/limpiar" method="POST" style="text-align:center; margin:20px;"
+    onsubmit="localStorage.removeItem('reporteDia')">
+    <button type="submit"
+      onclick="return confirm('¿Seguro que quieres limpiar el corte del día? Esto borrará todos los registros.')">
+      Limpiar Corte del Día
+    </button>
+  </form>
+
+  <div style="text-align:center; margin-top: 15px;">
+    <a href="/corte/ticket" target="_blank"><button>Ver/Imprimir Ticket</button></a>
+  </div>
+
+  <a href="/">🏠 Volver al inicio</a>
+</body>
+
+</html>

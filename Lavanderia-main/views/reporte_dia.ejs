@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Reporte del Día</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: url('/images/fondo_reporte.png') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px;
+    }
+
+    textarea {
+      width: 80%;
+      height: 300px;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      resize: none;
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    .botones {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .volver-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background-color: #6c757d;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📝 Reporte del Día</h1>
+  <textarea id="reporte" placeholder="Escribe aquí lo ocurrido hoy..."></textarea>
+
+  <div class="botones">
+    <button onclick="descargarReporte()">📥 Descargar</button>
+    <button onclick="borrarReporte()">🗑 Borrar</button>
+  </div>
+
+  <a class="volver-btn" href="/">🏠 Volver al inicio</a>
+
+  <script>
+    const textarea = document.getElementById('reporte');
+
+    // Cargar reporte guardado si existe
+    window.onload = () => {
+      const guardado = localStorage.getItem('reporteDia');
+      if (guardado) textarea.value = guardado;
+    };
+
+    // Guardar en localStorage al escribir
+    textarea.addEventListener('input', () => {
+      localStorage.setItem('reporteDia', textarea.value);
+    });
+
+    function borrarReporte() {
+      if (confirm('¿Seguro que quieres borrar el reporte del día?')) {
+        localStorage.removeItem('reporteDia');
+        textarea.value = '';
+      }
+    }
+
+    function descargarReporte() {
+      const texto = textarea.value.trim();
+      if (!texto) return alert('No hay nada que descargar.');
+      const blob = new Blob([texto], { type: 'text/plain;charset=utf-8' });
+      const enlace = document.createElement('a');
+      enlace.href = URL.createObjectURL(blob);
+      enlace.download = 'reporte_del_dia.txt';
+      enlace.click();
+    }
+  </script>
+</body>
+</html>
