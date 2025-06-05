@@ -1,4 +1,4 @@
-## 🧑‍💻 Team Capacity - Lavandería-App _(Semana del 8 al 14 de Mayo de 2025)_
+## 🧑‍💻 Team Capacity - Lavandería-App _(Semana del 8 al 14 de Mayo - 5 de junio de 2025)_
 
 | Miembro del Equipo | Rol           | Capacidad semanal | Tareas asignadas actualmente                      |
 |--------------------|---------------|-------------------|---------------------------------------------------|
