@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Tienda de Insumos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 270px;
+      height: 100%;
+      background: #f9f9f9;
+      padding: 20px;
+      overflow-y: auto;
+      border-right: 1px solid #ccc;
+    }
+
+    .main {
+      margin-left: 290px;
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .producto {
+      border: 1px solid #ccc;
+      padding: 10px;
+      width: 200px;
+      text-align: center;
+      background: #fff;
+      border-radius: 10px;
+    }
+
+    .producto img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+    }
+
+    .carrito-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 8px;
+    }
+
+    .carrito-item img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 5px 10px;
+      margin-top: 5px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .borrar-btn {
+      background-color: #dc3545;
+      margin-left: auto;
+    }
+
+    .volver-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background-color: #6c757d;
+    }
+  </style>
+</head>
+<body>
+  <!-- Carrito -->
+  <div class="sidebar">
+    <h3>🛒 Carrito</h3>
+    <div id="itemsCarrito"></div>
+    <p><strong>Total:</strong> $<span id="total">0</span></p>
+
+    <form action="/comprar-insumos" method="POST" onsubmit="return prepararCompra()">
+      <input type="hidden" name="detalle" id="detalleInput">
+      <input type="hidden" name="total" id="totalInput">
+      <button type="submit">Comprar</button>
+    </form>
+
+    <button onclick="borrarCarrito()" style="margin-top:10px; background:#dc3545;">🗑 Vaciar Carrito</button>
+  </div>
+
+  <!-- Productos -->
+  <div class="main">
+    <% const productos = [
+      { nombre: "Jabón en Polvo", precio: 20, img: "jabon_polvo.png" },
+      { nombre: "Jabón Líquido", precio: 25, img: "jabon_liquido.png" },
+      { nombre: "Suavitel", precio: 22, img: "suavitel.png" },
+      { nombre: "Desinfectante", precio: 18, img: "desinfectante.png" }
+    ]; %>
+
+    <% productos.forEach(p => { %>
+      <div class="producto">
+        <img src="/images/<%= p.img %>" alt="<%= p.nombre %>">
+        <h4><%= p.nombre %></h4>
+        <p>$<%= p.precio %></p>
+        <button onclick="agregarAlCarrito('<%= p.nombre %>', <%= p.precio %>, '<%= p.img %>')">Agregar</button>
+      </div>
+    <% }) %>
+  </div>
+
+  <a class="volver-btn" href="/">🏠 Volver al inicio</a>
+
+  <script>
+    const carrito = {};
+    const lista = document.getElementById('itemsCarrito');
+    const totalSpan = document.getElementById('total');
+
+    function agregarAlCarrito(nombre, precio, img) {
+      if (!carrito[nombre]) {
+        carrito[nombre] = { cantidad: 1, precio, img };
+      } else {
+        carrito[nombre].cantidad++;
+      }
+      actualizarCarrito();
+    }
+
+    function eliminarItem(nombre) {
+      delete carrito[nombre];
+      actualizarCarrito();
+    }
+
+    function borrarCarrito() {
+      for (let key in carrito) delete carrito[key];
+      actualizarCarrito();
+    }
+
+    function actualizarCarrito() {
+      lista.innerHTML = '';
+      let total = 0;
+      for (let nombre in carrito) {
+        const item = carrito[nombre];
+        total += item.precio * item.cantidad;
+
+        const div = document.createElement('div');
+        div.className = 'carrito-item';
+
+        div.innerHTML = `
+          <img src="/images/${item.img}" alt="${nombre}">
+          <span>${item.cantidad}x ${nombre} ($${item.precio * item.cantidad})</span>
+          <button class="borrar-btn" onclick="eliminarItem('${nombre}')">X</button>
+        `;
+        lista.appendChild(div);
+      }
+      totalSpan.textContent = total;
+    }
+
+    function prepararCompra() {
+      let detalle = [];
+      let total = 0;
+      for (let nombre in carrito) {
+        const item = carrito[nombre];
+        detalle.push(`${item.cantidad}x ${nombre}`);
+        total += item.precio * item.cantidad;
+      }
+      document.getElementById('detalleInput').value = detalle.join(', ');
+      document.getElementById('totalInput').value = total;
+      return true;
+    }
+  </script>
+</body>
+</html>

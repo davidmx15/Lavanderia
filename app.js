@@ -41,6 +41,11 @@ app.get('/lavadora', (req, res) => {
     res.render('lavadora');
 });
 
+app.get('/tienda', (req, res) => {
+    res.render('tienda');
+});
+
+
 app.post('/guardar-ganancia', (req, res) => {
     const { ganancia } = req.body;
     if (!ganancia || isNaN(ganancia)) {
@@ -59,6 +64,18 @@ app.post('/guardar-ganancia', (req, res) => {
         }
     );
 });
+
+
+app.post('/comprar-insumos', (req, res) => {
+    const { total, detalle } = req.body;
+    const fecha = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    const query = 'INSERT INTO corte_lavadora (fecha, ganancia, descripcion) VALUES (?, ?, ?)';
+    db.query(query, [fecha, total, `Venta de insumos: ${detalle}`], (err, result) => {
+        if (err) throw err;
+        res.redirect('/tienda'); // o a donde quieras mandar después
+    });
+});
+
 
 app.get('/corte', (req, res) => {
     db.query('SELECT * FROM corte_lavadora ORDER BY fecha DESC', (err, cortes) => {
