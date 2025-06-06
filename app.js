@@ -76,6 +76,9 @@ app.post('/comprar-insumos', (req, res) => {
     });
 });
 
+app.get('/reporte_dia', (req, res) => {
+    res.render('reporte_dia'); 
+});
 
 app.get('/corte', (req, res) => {
     db.query('SELECT * FROM corte_lavadora ORDER BY fecha DESC', (err, cortes) => {

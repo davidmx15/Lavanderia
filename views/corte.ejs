@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Corte del Día</title>
@@ -10,7 +11,8 @@
       border-collapse: collapse;
     }
 
-    th, td {
+    th,
+    td {
       border: 1px solid #aaa;
       padding: 8px;
       text-align: center;
@@ -20,7 +22,8 @@
       background-color: #eee;
     }
 
-    h1, h2 {
+    h1,
+    h2 {
       text-align: center;
     }
 
@@ -44,9 +47,11 @@
     }
   </style>
 </head>
+
 <body>
   <h1>Corte del Día</h1>
-  <h2>Total Ganado: $<%= Number(totalGanancia).toFixed(2) %></h2>
+  <h2>Total Ganado: $<%= Number(totalGanancia).toFixed(2) %>
+  </h2>
 
   <table>
     <tr>
@@ -55,27 +60,35 @@
       <th>Ganancia</th>
       <th>Detalle (si aplica)</th>
     </tr>
-    <% if (cortes.length === 0) { %>
+    <% if (cortes.length===0) { %>
       <tr>
         <td colspan="4">No hay registros aún.</td>
       </tr>
-    <% } else { %>
-      <% cortes.forEach(corte => { %>
-        <tr>
-          <td><%= corte.id %></td>
-          <td><%= new Date(corte.fecha).toLocaleString() %></td>
-          <td>
-            <%= corte.descripcion && corte.descripcion.length > 0 ? 'Insumos: $' : 'Lavadora: $' %>
-            <%= Number(corte.ganancia).toFixed(2) %>
-          </td>
-          <td><%= corte.descripcion || '---' %></td>
-        </tr>
-      <% }) %>
-    <% } %>
+      <% } else { %>
+        <% cortes.forEach(corte=> { %>
+          <tr>
+            <td>
+              <%= corte.id %>
+            </td>
+            <td>
+              <%= new Date(corte.fecha).toLocaleString() %>
+            </td>
+            <td>
+              <%= corte.descripcion && corte.descripcion.length> 0 ? 'Insumos: $' : 'Lavadora: $' %>
+                <%= Number(corte.ganancia).toFixed(2) %>
+            </td>
+            <td>
+              <%= corte.descripcion || '---' %>
+            </td>
+          </tr>
+          <% }) %>
+            <% } %>
   </table>
 
-  <form action="/corte/limpiar" method="POST" style="text-align:center; margin:20px;">
-    <button type="submit" onclick="return confirm('¿Seguro que quieres limpiar el corte del día? Esto borrará todos los registros.')">
+  <form action="/corte/limpiar" method="POST" style="text-align:center; margin:20px;"
+    onsubmit="localStorage.removeItem('reporteDia')">
+    <button type="submit"
+      onclick="return confirm('¿Seguro que quieres limpiar el corte del día? Esto borrará todos los registros.')">
       Limpiar Corte del Día
     </button>
   </form>
@@ -86,4 +99,5 @@
 
   <a href="/">🏠 Volver al inicio</a>
 </body>
+
 </html>
